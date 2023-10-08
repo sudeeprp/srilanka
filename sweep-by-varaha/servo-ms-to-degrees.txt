@@ -1,0 +1,71 @@
+up
+was ms: 719; degrees: 17
+going to degrees: 16
+was ms: 708; degrees: 16
+going to degrees: 15
+was ms: 698; degrees: 15
+going to degrees: 14
+was ms: 688; degrees: 14
+going to degrees: 13
+was ms: 678; degrees: 13
+going to degrees: 12
+was ms: 667; degrees: 12
+going to degrees: 11
+was ms: 657; degrees: 11
+going to degrees: 10
+was ms: 647; degrees: 10
+going to degrees: 9
+was ms: 636; degrees: 9
+going to degrees: 8
+was ms: 626; degrees: 8
+going to degrees: 7
+was ms: 616; degrees: 7
+going to degrees: 6
+was ms: 605; degrees: 6
+going to degrees: 5
+was ms: 595; degrees: 5
+going to degrees: 4
+was ms: 585; degrees: 4
+going to degrees: 3
+was ms: 574; degrees: 3
+going to degrees: 2
+was ms: 564; degrees: 2
+going to degrees: 1
+was ms: 554; degrees: 1
+going to degrees: 0
+
+down
+was ms: 544; degrees: 0
+going to degrees: 1
+was ms: 554; degrees: 1
+going to degrees: 2
+was ms: 564; degrees: 2
+going to degrees: 3
+was ms: 574; degrees: 3
+going to degrees: 4
+was ms: 585; degrees: 4
+going to degrees: 5
+was ms: 595; degrees: 5
+going to degrees: 6
+was ms: 605; degrees: 6
+going to degrees: 7
+was ms: 616; degrees: 7
+going to degrees: 8
+was ms: 626; degrees: 8
+going to degrees: 9
+was ms: 636; degrees: 9
+going to degrees: 10
+was ms: 647; degrees: 10
+going to degrees: 11
+was ms: 657; degrees: 11
+going to degrees: 12
+was ms: 667; degrees: 12
+going to degrees: 13
+was ms: 678; degrees: 13
+going to degrees: 14
+was ms: 688; degrees: 14
+going to degrees: 15
+was ms: 698; degrees: 15
+going to degrees: 16
+was ms: 708; degrees: 16
+going to degrees: 17

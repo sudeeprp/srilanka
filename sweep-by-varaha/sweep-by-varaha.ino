@@ -20,7 +20,7 @@ void angulate_to(int target_angle) {
   for(angle += increment; angle != target_angle; angle += increment) {
     print_angle(angle);
     myservo.write(angle);
-    delay(500);
+    delay(30);
     print_laser();
   }
   print_angle(angle);
@@ -35,14 +35,14 @@ void print_laser() {
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Sweep from pin 9 slow");
+  Serial.println("Sweep 90, pin 9 slow. laser sensor");
   myservo.attach(9);
   pinMode(A6, INPUT);
 }
 
 void loop() {
   Serial.println("down");
-  angulate_to(17);
+  angulate_to(90);
   delay(3000);
   Serial.println("up");
   angulate_to(0);

@@ -25,7 +25,7 @@ def dispatch_from_ports():
     for incomingserial in serialports:
       if incomingserial.in_waiting > 0:
         serialstr = incomingserial.readline().decode()
-        print(f'received >{serialstr}<')
+        print(f'>{serialstr}<')
         dispatch(serialstr)
     time.sleep(0.25)
 

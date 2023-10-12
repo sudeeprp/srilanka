@@ -1,6 +1,9 @@
 #include <Servo.h>
 
-Servo myservo;
+Servo shivaservo;
+Servo hiranyaservo;
+Servo slvservo;
+
 enum STATE {
   WAITINGVARAHA,
   PLAYING
@@ -10,10 +13,6 @@ STATE currentState = WAITINGVARAHA;
 int angle = 0;
 
 void print_angle(int target_angle) {
-  Serial.print("was ms: ");
-  Serial.print(myservo.readMicroseconds());
-  Serial.print("; degrees: ");
-  Serial.println(myservo.read());
   Serial.print("going to degrees: ");
   Serial.println(target_angle);
 }
@@ -25,11 +24,11 @@ void angulate_to(int target_angle) {
   }
   for(angle += increment; angle != target_angle; angle += increment) {
     print_angle(angle);
-    myservo.write(angle);
+    shivaservo.write(angle);
     delay(30);
   }
   print_angle(angle);
-  myservo.write(angle);
+  shivaservo.write(angle);
 }
 
 int varahaLifted() {
@@ -42,12 +41,17 @@ int varahaLifted() {
 }
 
 void killHiranyaksha() {
-  Serial.println("pending: hiranyaksha");
-  delay(2000);
+  Serial.println("hiranya fall to 135 after huaah");
+  hiranyaservo.write(135);
+  delay(1000);
 }
 
 void wavesAndKalyani() {
-  Serial.println("pending: waves & kalyani");
+  Serial.println("kalyani to 90. pending: waves");
+  for (int rise = 0; rise <=90; ++rise) {
+    slvservo.write(rise);
+    delay(30);
+  }
   delay(5000);
 }
 
@@ -59,6 +63,8 @@ void shivaInHimalaya() {
 void reset() {
   Serial.println("reset");
   angulate_to(0);
+  hiranyaservo.write(0);
+  slvservo.write(0);
   currentState = WAITINGVARAHA;
 }
 
@@ -75,8 +81,13 @@ int resetRequested() {
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Sweep 90, pin 9 slow. IR sensor");
-  myservo.attach(9);
+  Serial.println("Sweep 90, pin 9 shiva slow, hiranya 10 fast, slv 11 slow. IR sensor");
+  shivaservo.attach(9);
+  shivaservo.write(0);
+  hiranyaservo.attach(10);
+  hiranyaservo.write(0);
+  slvservo.attach(11);
+  slvservo.write(0);
   pinMode(A6, INPUT);
 }
 
@@ -84,7 +95,7 @@ void loop() {
   if (varahaLifted()) {
     currentState = PLAYING;
     Serial.println("varaha");
-    delay(3000);
+    delay(4000);
     killHiranyaksha();
     wavesAndKalyani();
     shivaInHimalaya();

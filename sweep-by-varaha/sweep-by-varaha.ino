@@ -18,11 +18,14 @@ void print_angle(int target_angle) {
 }
 
 void angulate_to(int target_angle) {
+  if (angle == target_angle) {
+    return;
+  }
   int increment = 1;
   if (target_angle < angle) {
     increment = -1;
   }
-  for(angle += increment; angle != target_angle; angle += increment) {
+  for(angle += increment; angle != target_angle && angle >= 0 && angle <= 90; angle += increment) {
     print_angle(angle);
     shivaservo.write(angle);
     delay(30);
@@ -47,12 +50,14 @@ void killHiranyaksha() {
 }
 
 void wavesAndKalyani() {
-  Serial.println("kalyani to 90. pending: waves");
+  Serial.println("pending: waves");
+  // TODO: pulsate waves for 5s
+  delay(5000);
+  Serial.println("kalyani to 90");
   for (int rise = 0; rise <=90; ++rise) {
     slvservo.write(rise);
-    delay(30);
+    delay(50);
   }
-  delay(5000);
 }
 
 void shivaInHimalaya() {
@@ -81,7 +86,10 @@ int resetRequested() {
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Sweep 90, pin 9 shiva slow, hiranya 10 fast, slv 11 slow. IR sensor");
+  Serial.println("Sweep protect, pin 9 shiva slow, hiranya 10 fast, slv 11 slow. IR sensor");
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
   shivaservo.attach(9);
   shivaservo.write(0);
   hiranyaservo.attach(10);

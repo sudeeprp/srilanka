@@ -51,18 +51,44 @@ void killHiranyaksha() {
 
 void wavesAndKalyani() {
   Serial.println("pending: waves");
-  // TODO: pulsate waves for 5s
-  delay(5000);
+  // TODO: pulsate waves
+  delay(6000);
+  // varaha + (6s)
   Serial.println("kalyani to 90");
   for (int rise = 0; rise <=90; ++rise) {
     slvservo.write(rise);
-    delay(50);
+    delay(120);
   }
+  // varaha + 6s + (120*90=10.8s)
+  delay(1500);
+  // varaha + 6s + 10.8s + (1.5s)
 }
 
 void shivaInHimalaya() {
   Serial.println("shiva");
   angulate_to(90);
+  // shiva + (30*90=2.7s)
+  delay(24000);
+  // shiva + 2.7s + (24s)
+}
+
+void pulsateTandava() {
+  for(int i = 0; i < 5; i++) {
+    shivaservo.write(93);
+    delay(100);
+    shivaservo.write(90);
+    delay(1700);
+  }
+  // tandava + (1.8*5=9s)
+  for(int j = 0; j < 15; j++) {
+    shivaservo.write(93);
+    delay(100);
+    shivaservo.write(90);
+    delay(300);    
+  }
+  //tandava + 9s + (0.4*15=6s)
+  delay(4000);
+  //tandava + 9s + 6s + (4s)
 }
 
 void reset() {
@@ -86,7 +112,7 @@ int resetRequested() {
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Sweep protect, pin 9 shiva slow, hiranya 10 fast, slv 11 slow. IR sensor");
+  Serial.println("Sweep protect, pin 9 shiva slow/pulse, hiranya 10 fast, slv 11 slow. IR sensor");
   pinMode(9, OUTPUT);
   pinMode(10, OUTPUT);
   pinMode(11, OUTPUT);
@@ -104,9 +130,11 @@ void loop() {
     currentState = PLAYING;
     Serial.println("varaha");
     delay(4000);
+    // huaah+4 s
     killHiranyaksha();
     wavesAndKalyani();
     shivaInHimalaya();
+    pulsateTandava();
   } else if (resetRequested()) {
     reset();
   }

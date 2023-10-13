@@ -70,7 +70,7 @@ def dispatch_from_ports():
 
 
 def request_to_ports(reqstr):
-  print('requesting reset')
+  print(f'requesting all ports: {reqstr}')
   for outgoingserial in serialports:
     outgoingserial.write(reqstr.encode())
 

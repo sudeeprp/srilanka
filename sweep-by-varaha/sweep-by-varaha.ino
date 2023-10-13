@@ -12,6 +12,7 @@ enum STATE {
 
 STATE currentState = WAITINGVARAHA;
 int angle = 0;
+const int max_angle = 110;
 
 void print_angle(int target_angle) {
   Serial.print("going to degrees: ");
@@ -26,7 +27,7 @@ void angulate_to(int target_angle) {
   if (target_angle < angle) {
     increment = -1;
   }
-  for(angle += increment; angle != target_angle && angle >= 0 && angle <= 90; angle += increment) {
+  for(angle += increment; angle != target_angle && angle >= 0 && angle <= max_angle; angle += increment) {
     print_angle(angle);
     shivaservo.write(angle);
     delay(30);
@@ -53,38 +54,38 @@ void killHiranyaksha() {
 void wavesAndKalyani() {
   Serial.println("pending: waves");
   // TODO: pulsate waves
-  delay(6000);
+  delay(4000);
   // varaha + (6s)
   Serial.println("kalyani to 90");
   for (int rise = 0; rise <=90; ++rise) {
     slvservo.write(rise);
-    delay(120);
+    delay(50);
   }
-  // varaha + 6s + (120*90=10.8s)
-  delay(1500);
-  // varaha + 6s + 10.8s + (1.5s)
+  // varaha + 6s + (50*90=4.5s)
+  delay(6500);
+  // varaha + 6s + 4.5s + (6.5s)
 }
 
 void shivaInHimalaya() {
   Serial.println("shiva");
-  angulate_to(90);
-  // shiva + (30*90=2.7s)
-  delay(24000);
-  // shiva + 2.7s + (24s)
+  angulate_to(110);
+  // shiva + (30*110=3.3s)
+  delay(23400);
+  // shiva + 3.3s + (23.4s)
 }
 
 void pulsateTandava() {
   for(int i = 0; i < 5; i++) {
-    shivaservo.write(93);
+    shivaservo.write(max_angle + 3);
     delay(100);
-    shivaservo.write(90);
+    shivaservo.write(max_angle);
     delay(1700);
   }
   // tandava + (1.8*5=9s)
   for(int j = 0; j < 15; j++) {
-    shivaservo.write(93);
+    shivaservo.write(max_angle + 3);
     delay(100);
-    shivaservo.write(90);
+    shivaservo.write(max_angle);
     delay(300);    
   }
   //tandava + 9s + (0.4*15=6s)
@@ -110,7 +111,7 @@ int serialInput() {
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Sweep protect, pin 9 shiva slow/pulse, hiranya 10 fast, slv 11 slow. IR sensor");
+  Serial.println("Sweep protect, pin 9 shiva 110, hiranya 10 fast, slv 11 slow. IR sensor");
   pinMode(9, OUTPUT);
   pinMode(10, OUTPUT);
   pinMode(11, OUTPUT);

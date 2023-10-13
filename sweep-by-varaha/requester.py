@@ -20,8 +20,10 @@ def varaha_rise():
 def ravana_power():
   pygame.mixer.music.load('ravana.mp3')
   pygame.mixer.music.play()
+  request_to_ports('P')
 
 def ravana_to_rama():
+  request_to_ports('Q')
   pygame.mixer.music.load('rangapura-vihara.mp3')
   pygame.mixer.music.play()
   request_to_ports('D')

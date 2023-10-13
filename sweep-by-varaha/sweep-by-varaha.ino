@@ -3,6 +3,7 @@
 Servo shivaservo;
 Servo hiranyaservo;
 Servo slvservo;
+const int pointerPin = 3;
 
 enum STATE {
   WAITINGVARAHA,
@@ -99,15 +100,12 @@ void reset() {
   currentState = WAITINGVARAHA;
 }
 
-int resetRequested() {
-  int request = 0;
+int serialInput() {
+  int incomingByte = 0;
   if (Serial.available() > 0) {
-    int incomingByte = Serial.read();
-    if (incomingByte == 'R') {
-      request = 1;
-    }
+    incomingByte = Serial.read();
   }
-  return request;
+  return incomingByte;
 }
 
 void setup() {
@@ -116,6 +114,7 @@ void setup() {
   pinMode(9, OUTPUT);
   pinMode(10, OUTPUT);
   pinMode(11, OUTPUT);
+  pinMode(pointerPin, OUTPUT);
   shivaservo.attach(9);
   shivaservo.write(0);
   hiranyaservo.attach(10);
@@ -135,8 +134,17 @@ void loop() {
     wavesAndKalyani();
     shivaInHimalaya();
     pulsateTandava();
-  } else if (resetRequested()) {
-    reset();
+  } else {
+    int incoming = serialInput();
+    if (incoming == 'R') {
+      reset();
+    } else if (incoming == 'P') {
+      Serial.println("pointer on");
+      digitalWrite(pointerPin, HIGH);
+    } else if (incoming == 'Q') {
+      Serial.println("pointer off");
+      digitalWrite(pointerPin, LOW);
+    }
   }
   delay(250);
 }

@@ -4,6 +4,7 @@ const int DA=0;//Right reverse
 const int DB=2;//Left reverse 
 const int trigPin = 12;
 const int echoPin = 14;
+const int pointerPin = 13; // D8
 
 enum STATE {
   MOVINGUP,
@@ -75,7 +76,7 @@ void monitorDistance() {
 
 void setup() {
   Serial.begin(9600);
-  Serial.println('slider with distance');
+  Serial.println('slider with distance, pointer 13');
   pinMode(PWMA, OUTPUT); 
   pinMode(DA, OUTPUT);
   
@@ -86,6 +87,8 @@ void setup() {
   
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
+
+  pinMode(pointerPin, OUTPUT);
 }
 
 void loop() {
@@ -105,10 +108,18 @@ void loop() {
         Serial.println("Stop");
         stop();
         break;
+      case 'P':
+        Serial.println("pointer on");
+        digitalWrite(pointerPin, HIGH);
+        break;
+      case 'Q':
+        Serial.println("pointer off");
+        digitalWrite(pointerPin, LOW);
+        break;
     }
   }
   monitorDistance();
-  Serial.print("State ");
+  Serial.print("DP13 state ");
   Serial.println(currentState);
   delay(250);
 }

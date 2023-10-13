@@ -24,6 +24,7 @@ def ravana_power():
 def ravana_to_rama():
   pygame.mixer.music.load('rangapura-vihara.mp3')
   pygame.mixer.music.play()
+  request_to_ports('D')
   
 
 def varaha_final(message):
@@ -35,6 +36,7 @@ def varaha_final(message):
     player.start()
   elif message == b'R':
     request_to_ports('R')
+    request_to_ports('U')
 
 
 def raksha_apeksha():

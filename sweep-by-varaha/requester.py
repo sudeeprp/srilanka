@@ -27,6 +27,7 @@ def ravana_to_rama():
   request_to_ports('Q')
   pygame.mixer.music.load('rangapura-vihara.mp3')
   pygame.mixer.music.play()
+  play_video('video-rangapura.mp4')
   request_to_ports('D')
   
 

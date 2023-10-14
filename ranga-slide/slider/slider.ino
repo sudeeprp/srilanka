@@ -15,7 +15,7 @@ int downLimitCm = 40;
 int upLimitCm = 5;
 STATE currentState = STATIONARY;
 int downStartMillis = 0;
-const int downwardTimeoutms= 12000;
+const int downwardTimeoutms= 15000;
 
 void startMoveUp() {
   digitalWrite(DA, LOW);
@@ -108,7 +108,7 @@ void loop() {
     }
   }
   monitorDistance();
-  Serial.print("DP4.b state ");
+  Serial.print("slider15.b ");
   Serial.println(currentState);
   delay(250);
 }

@@ -5,7 +5,7 @@ import pygame
 import sys
 import threading
 import paho.mqtt.client as mqtt
-
+from playvideo import play_video
 
 def varaha_rise():
   pygame.mixer.music.load('huaah.mp3')
@@ -20,6 +20,7 @@ def varaha_rise():
 def ravana_power():
   pygame.mixer.music.load('ravana.mp3')
   pygame.mixer.music.play()
+  play_video('video-ravana.mp4')
   request_to_ports('P')
 
 def ravana_to_rama():

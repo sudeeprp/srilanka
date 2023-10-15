@@ -9,25 +9,32 @@ import paho.mqtt.client as mqtt
 from playvideo import play_video
 import showimage
 
+current_state = 'tostart'
+
+
 def show_varaha():
   showimage.show_image('varaha-intro.jpg')
 
 def varaha_rise():
+  global current_state
   pygame.mixer.music.load('huaah.mp3')
   pygame.mixer.music.play()
   time.sleep(4)
   pygame.mixer.music.load('varaha-roopam-shiva-sambhoota.mp3')
   pygame.mixer.music.play()
-  time.sleep(45.5)
+  time.sleep(45.5 + 18)
   print('playing done')
+  current_state = 'varahadone'
 
 
 def ravana_power():
+  global current_state
   showimage.stop_image()
   pygame.mixer.music.load('ravana.mp3')
   pygame.mixer.music.play()
   play_video('video-ravana.mp4')
   request_to_ports('P')
+  current_state = 'ravanafinishing'
   showimage.show_image('vibheeshana-pointer.png')
 
 def ravana_to_rama():
@@ -45,25 +52,42 @@ def ranga_descends_in_a_while():
 
 
 def varaha_final(message):
+  global current_state
   if message == b'S':
-    player = threading.Thread(target=ravana_power)
-    player.start()
+    if current_state == 'varahadone':
+      current_state = 'ravanastarted'
+      player = threading.Thread(target=ravana_power)
+      player.start()
   elif message == b'D':
-    player = threading.Thread(target=ravana_to_rama)
-    player.start()
+    if current_state == 'ravanafinishing':
+      current_state = 'ranga'
+      player = threading.Thread(target=ravana_to_rama)
+      player.start()
   elif message == b'R':
     request_to_ports('R')
     request_to_ports('U')
-    start_over()
+    time.sleep(0.5)
+    os._exit(0)
   elif message == b'L':
     print('Exiting...')
     os._exit(0)
+  elif message == 'up':
+    print('ranga returns')
+    request_to_ports('U')
+  elif message == 'down':
+    print('ranga descends')
+    request_to_ports('D')
+  elif message == 'point':
+    request_to_ports('P')
+  elif message == 'pointoff':
+    request_to_ports('Q')
 
 
 def raksha_apeksha():
   def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("varaha/#")
+    client.publish("varaha/ver", '2.0ex', True)
   def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
     if msg.topic == 'varaha/final':
@@ -76,7 +100,9 @@ def raksha_apeksha():
 
 
 def dispatch(event):
-  if event == 'varaha':
+  global current_state
+  if event == 'varaha' and current_state == 'tostart':
+    current_state = 'varahastarted'
     player = threading.Thread(target=varaha_rise)
     player.start()
 
@@ -124,7 +150,12 @@ else:
   pygame.mixer.init()
   finalizer = threading.Thread(target=raksha_apeksha)
   finalizer.start()
-  if len(ports) > 0:
+  if len(ports) == 2:
     dispatch_from_ports()
-  else:
+  elif len(ports) == 0:
     dispatch_from_input()
+  else:
+    print('could not find all ports. reconnect all usb slowly, and start again')
+    import keyboard
+    keyboard.getch()
+    os._exit(1)

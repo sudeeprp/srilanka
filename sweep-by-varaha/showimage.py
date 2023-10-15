@@ -26,7 +26,7 @@ def show_image(filename):
                             cv2.WINDOW_FULLSCREEN)
     cv2.imshow(window_name, image)
     while not stoprequested:
-        cv2.waitKey(250)
+        cv2.waitKey(100)
     print(f'stopping image {filename}')
     stoprequested = False
     cv2.destroyWindow('projector')

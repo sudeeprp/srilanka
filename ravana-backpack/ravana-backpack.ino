@@ -16,7 +16,7 @@ void pollForLight() {
   Serial.print("Analog input: ");
   int photoVoltaic = analogRead(A0);
   Serial.println(photoVoltaic);
-  if (photoVoltaic > 300) {
+  if (photoVoltaic > 105) {
     Serial.println("off the solenoid!");
     client.publish("varaha/final", "D");
     digitalWrite(DA, LOW);
@@ -26,9 +26,9 @@ void pollForLight() {
     digitalWrite(DA, HIGH);
     digitalWrite(PWMA, HIGH);
   }
-  char lightstr[16];
-  sprintf(lightstr, "%d", photoVoltaic);
-  client.publish("varaha/light", lightstr, true);
+//  char lightstr[16];
+//  sprintf(lightstr, "%d", photoVoltaic);
+//  client.publish("varaha/light", lightstr, true);
   client.executeDelayed(500, []() {
     pollForLight();
   });
@@ -36,7 +36,7 @@ void pollForLight() {
 
 void onConnectionEstablished() {
   Serial.println("Connected");
-  client.executeDelayed(250, []() {
+  client.executeDelayed(2500, []() {
     client.publish("varaha/final", "S");
   });
 }
@@ -44,7 +44,7 @@ void onConnectionEstablished() {
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  Serial.println("off on pointer");
+  Serial.println("off on pointer, wifi");
   pinMode(PWMA, OUTPUT); 
   pinMode(DA, OUTPUT);
   client.enableDebuggingMessages(); // Enable debugging messages sent to serial output

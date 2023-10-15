@@ -3,9 +3,14 @@ import time
 import serial.tools.list_ports
 import pygame
 import sys
+import os
 import threading
 import paho.mqtt.client as mqtt
 from playvideo import play_video
+import showimage
+
+def show_varaha():
+  showimage.show_image('varaha-intro.jpg')
 
 def varaha_rise():
   pygame.mixer.music.load('huaah.mp3')
@@ -18,18 +23,26 @@ def varaha_rise():
 
 
 def ravana_power():
+  showimage.stop_image()
   pygame.mixer.music.load('ravana.mp3')
   pygame.mixer.music.play()
   play_video('video-ravana.mp4')
   request_to_ports('P')
+  showimage.show_image('vibheeshana-pointer.png')
 
 def ravana_to_rama():
+  showimage.stop_image()
   request_to_ports('Q')
   pygame.mixer.music.load('rangapura-vihara.mp3')
   pygame.mixer.music.play()
-  play_video('video-rangapura.mp4')
+  threading.Thread(target=ranga_descends_in_a_while).start()
+  play_video('video-rangapura.mp4', 'varaha-intro.jpg')
+
+def ranga_descends_in_a_while():
+  print('descending in a while...')
+  time.sleep(15)
   request_to_ports('D')
-  
+
 
 def varaha_final(message):
   if message == b'S':
@@ -41,6 +54,10 @@ def varaha_final(message):
   elif message == b'R':
     request_to_ports('R')
     request_to_ports('U')
+    start_over()
+  elif message == b'L':
+    print('Exiting...')
+    os._exit(0)
 
 
 def raksha_apeksha():
@@ -66,7 +83,13 @@ def dispatch(event):
 
 serialports = []
 
+def start_over():
+  introshow = threading.Thread(target=show_varaha)
+  introshow.start()
+
+
 def dispatch_from_ports():
+  start_over()
   while True:
     for incomingserial in serialports:
       if incomingserial.in_waiting > 0:
@@ -82,6 +105,7 @@ def request_to_ports(reqstr):
 
 
 def dispatch_from_input():
+  start_over()
   while True:
     event = input('tell: ')
     dispatch(event)
@@ -104,4 +128,3 @@ else:
     dispatch_from_ports()
   else:
     dispatch_from_input()
-

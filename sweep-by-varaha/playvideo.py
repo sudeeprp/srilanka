@@ -1,8 +1,9 @@
 # https://stackoverflow.com/questions/49949639/fullscreen-a-video-on-opencv
 
 import cv2
+from showimage import show_image
 
-def play_video(file_name):
+def play_video(file_name, hold_image_name=None):
     window_name = file_name
     interframe_wait_ms = 30
 
@@ -12,7 +13,8 @@ def play_video(file_name):
 
     cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
     cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-    cv2.setWindowProperty(window_name, cv2.WND_PROP_TOPMOST, 1)
+    # This will prevent ANY other window from being seen!! Hence removed.
+    # cv2.setWindowProperty(window_name, cv2.WND_PROP_TOPMOST, 1)
 
     while (True):
         ret, frame = cap.read()
@@ -26,4 +28,6 @@ def play_video(file_name):
             break
 
     cap.release()
-    cv2.destroyAllWindows()
+    cv2.destroyWindow(window_name)
+    if hold_image_name != None:
+        show_image(hold_image_name)

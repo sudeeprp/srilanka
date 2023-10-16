@@ -12,11 +12,19 @@ import showimage
 current_state = 'tostart'
 
 
+def switch_image_to(filename):
+  showimage.stop_image()
+  threading.Thread(target=lambda:
+    showimage.show_image(filename)
+  ).start()
+
+
 def show_varaha():
   showimage.show_image('varaha-intro.jpg')
 
 def varaha_rise():
   global current_state
+  switch_image_to('night-sky.jpg')
   pygame.mixer.music.load('huaah.mp3')
   pygame.mixer.music.play()
   time.sleep(4)
@@ -43,7 +51,7 @@ def ravana_to_rama():
   pygame.mixer.music.load('rangapura-vihara.mp3')
   pygame.mixer.music.play()
   threading.Thread(target=ranga_descends_in_a_while).start()
-  play_video('video-rangapura.mp4', 'varaha-intro.jpg')
+  play_video('video-rangapura.mp4', 'srirangam-at-night.jpg')
 
 def ranga_descends_in_a_while():
   print('descending in a while...')
@@ -71,23 +79,28 @@ def varaha_final(message):
   elif message == b'L':
     print('Exiting...')
     os._exit(0)
-  elif message == 'up':
+  elif message == b'up':
     print('ranga returns')
     request_to_ports('U')
-  elif message == 'down':
+  elif message == b'down':
     print('ranga descends')
     request_to_ports('D')
-  elif message == 'point':
+  elif message == b'point':
     request_to_ports('P')
-  elif message == 'pointoff':
+  elif message == b'pointoff':
     request_to_ports('Q')
+  elif message == b'epiravana':
+    threading.Thread(target=ravana_power).start()
+  elif message == b'epirama':
+    print('starting rama...')
+    threading.Thread(target=ravana_to_rama).start()
 
 
 def raksha_apeksha():
   def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("varaha/#")
-    client.publish("varaha/ver", '2.0ex', True)
+    client.publish("varaha/ver", '2.2sw', True)
   def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
     if msg.topic == 'varaha/final':
@@ -119,9 +132,13 @@ def dispatch_from_ports():
   while True:
     for incomingserial in serialports:
       if incomingserial.in_waiting > 0:
-        serialstr = incomingserial.readline().decode().strip()
-        print(serialstr)
-        dispatch(serialstr)
+        try:
+          serialstr = incomingserial.readline().decode().strip()
+          print(serialstr)
+          dispatch(serialstr)
+        except:
+          print('error reading serial. exiting...')
+          os._exit(1)
 
 
 def request_to_ports(reqstr):

@@ -8,6 +8,7 @@ stoprequested = False
 def stop_image():
     global stoprequested
     stoprequested = True
+    time.sleep(0.15)
 
 def show_image(filename):
     global stoprequested
